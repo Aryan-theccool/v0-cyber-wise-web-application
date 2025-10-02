@@ -26,46 +26,52 @@ export default function HomePage() {
             </span>
           </Link>
 
-          <div className="hidden items-center gap-6 md:flex">
+          <div className="hidden items-center gap-1 md:flex">
             <Link
               href="/"
-              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-3 py-2 rounded-md"
+              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-3 py-2 rounded-md whitespace-nowrap"
             >
               Home
             </Link>
             <Link
               href="/chatbot"
-              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-3 py-2 rounded-md"
+              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-3 py-2 rounded-md whitespace-nowrap"
             >
               Chatbot
             </Link>
             <Link
               href="/report"
-              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-3 py-2 rounded-md"
+              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-3 py-2 rounded-md whitespace-nowrap"
             >
               Report
             </Link>
             <Link
               href="/journal"
-              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-3 py-2 rounded-md"
+              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-3 py-2 rounded-md whitespace-nowrap"
             >
               Journal
             </Link>
             <Link
+              href="/student-dashboard"
+              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-3 py-2 rounded-md whitespace-nowrap"
+            >
+              My Progress
+            </Link>
+            <Link
               href="/dashboard"
-              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-3 py-2 rounded-md"
+              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-3 py-2 rounded-md whitespace-nowrap"
             >
               Dashboard
             </Link>
             <Link
               href="/awareness"
-              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-3 py-2 rounded-md"
+              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-3 py-2 rounded-md whitespace-nowrap"
             >
               Awareness
             </Link>
             <Link
               href="/helpline"
-              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-3 py-2 rounded-md"
+              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-3 py-2 rounded-md whitespace-nowrap"
             >
               Helpline
             </Link>

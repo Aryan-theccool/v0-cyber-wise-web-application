@@ -2,6 +2,7 @@ import type React from "react"
 import Link from "next/link"
 import { Shield, MessageCircle, FileText, BookOpen, BarChart3, PenTool } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { CyberWiseLogo } from "@/components/cyberwise-logo"
 
 export default function HomePage() {
   return (
@@ -11,7 +12,10 @@ export default function HomePage() {
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <Link href="/" className="flex items-center gap-2">
             <Shield className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold">CyberWise</span>
+            <span className="text-xl font-bold">
+              <span className="text-primary">Cyber</span>
+              <span className="text-secondary">Wise</span>
+            </span>
           </Link>
 
           <div className="hidden items-center gap-6 md:flex">
@@ -49,9 +53,9 @@ export default function HomePage() {
             Your Safe Space Online
           </div>
 
-          <h1 className="mb-6 text-balance text-5xl font-bold leading-tight tracking-tight md:text-7xl">
-            CyberWise – Stay Safe. Stay Aware.
-          </h1>
+          <div className="mb-6">
+            <CyberWiseLogo size="lg" />
+          </div>
 
           <p className="mb-10 text-pretty text-lg text-muted-foreground md:text-xl">
             Your safe space for cyber awareness, support, and protection. We're here to help students navigate

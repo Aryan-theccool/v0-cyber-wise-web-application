@@ -50,7 +50,7 @@ export default function HomePage() {
           </div>
 
           <h1 className="mb-6 text-balance text-5xl font-bold leading-tight tracking-tight md:text-7xl">
-            CyberWise
+            CyberWise – Stay Safe. Stay Aware.
           </h1>
 
           <p className="mb-10 text-pretty text-lg text-muted-foreground md:text-xl">

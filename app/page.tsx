@@ -3,6 +3,8 @@ import Link from "next/link"
 import { Shield, MessageCircle, FileText, BookOpen, BarChart3, PenTool } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { CyberWiseLogo } from "@/components/cyberwise-logo"
+import { MobileNav } from "@/components/mobile-nav"
+import { NavLink } from "@/components/nav-link"
 
 export default function HomePage() {
   return (
@@ -27,57 +29,21 @@ export default function HomePage() {
           </Link>
 
           <div className="hidden items-center gap-1 md:flex">
-            <Link
-              href="/"
-              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-3 py-2 rounded-md whitespace-nowrap"
-            >
-              Home
-            </Link>
-            <Link
-              href="/chatbot"
-              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-3 py-2 rounded-md whitespace-nowrap"
-            >
-              Chatbot
-            </Link>
-            <Link
-              href="/report"
-              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-3 py-2 rounded-md whitespace-nowrap"
-            >
-              Report
-            </Link>
-            <Link
-              href="/journal"
-              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-3 py-2 rounded-md whitespace-nowrap"
-            >
-              Journal
-            </Link>
-            <Link
-              href="/student-dashboard"
-              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-3 py-2 rounded-md whitespace-nowrap"
-            >
-              My Progress
-            </Link>
-            <Link
-              href="/dashboard"
-              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-3 py-2 rounded-md whitespace-nowrap"
-            >
-              Dashboard
-            </Link>
-            <Link
-              href="/awareness"
-              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-3 py-2 rounded-md whitespace-nowrap"
-            >
-              Awareness
-            </Link>
-            <Link
-              href="/helpline"
-              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-3 py-2 rounded-md whitespace-nowrap"
-            >
-              Helpline
-            </Link>
+            <NavLink href="/">Home</NavLink>
+            <NavLink href="/chatbot">Chatbot</NavLink>
+            <NavLink href="/report">Report</NavLink>
+            <NavLink href="/journal">Journal</NavLink>
+            <NavLink href="/student-dashboard">My Progress</NavLink>
+            <NavLink href="/dashboard">Dashboard</NavLink>
+            <NavLink href="/awareness">Awareness</NavLink>
+            <NavLink href="/helpline">Helpline</NavLink>
           </div>
 
-          <Button size="sm">Get Started</Button>
+          <Button size="sm" className="hidden hover:bg-[#1ABC9C] transition-colors md:inline-flex">
+            Get Started
+          </Button>
+
+          <MobileNav />
         </div>
       </nav>
 

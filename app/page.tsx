@@ -13,31 +13,60 @@ export default function HomePage() {
           <Link href="/" className="flex items-center gap-2">
             <Shield className="h-6 w-6 text-primary" />
             <span className="text-xl font-bold">
-              <span className="text-primary">Cyber</span>
-              <span className="text-secondary">Wise</span>
+              <span
+                className="bg-gradient-to-r from-[#4A90E2] via-[#9B59B6] to-[#1ABC9C] bg-clip-text text-transparent"
+                style={{
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              >
+                CyberWise
+              </span>
             </span>
           </Link>
 
           <div className="hidden items-center gap-6 md:flex">
-            <Link href="/" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+            <Link
+              href="/"
+              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-3 py-2 rounded-md"
+            >
               Home
             </Link>
-            <Link href="/chatbot" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+            <Link
+              href="/chatbot"
+              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-3 py-2 rounded-md"
+            >
               Chatbot
             </Link>
-            <Link href="/report" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+            <Link
+              href="/report"
+              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-3 py-2 rounded-md"
+            >
               Report
             </Link>
-            <Link href="/journal" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+            <Link
+              href="/journal"
+              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-3 py-2 rounded-md"
+            >
               Journal
             </Link>
-            <Link href="/dashboard" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+            <Link
+              href="/dashboard"
+              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-3 py-2 rounded-md"
+            >
               Dashboard
             </Link>
-            <Link href="/awareness" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+            <Link
+              href="/awareness"
+              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-3 py-2 rounded-md"
+            >
               Awareness
             </Link>
-            <Link href="/helpline" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+            <Link
+              href="/helpline"
+              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-3 py-2 rounded-md"
+            >
               Helpline
             </Link>
           </div>
@@ -63,12 +92,15 @@ export default function HomePage() {
           </p>
 
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Button size="lg" className="w-full sm:w-auto" asChild>
+            <Button size="lg" className="w-full sm:w-auto hover:bg-[#1ABC9C] transition-colors" asChild>
               <Link href="/chatbot">Get Support</Link>
             </Button>
-            <Button size="lg" variant="outline" className="w-full sm:w-auto bg-transparent" asChild>
-              <Link href="/awareness">Learn Awareness</Link>
-            </Button>
+            <Link
+              href="/awareness"
+              className="text-sm text-muted-foreground transition-colors hover:text-white hover:bg-[#1ABC9C] px-4 py-2 rounded-md border border-border"
+            >
+              Learn Awareness
+            </Link>
           </div>
         </div>
       </section>

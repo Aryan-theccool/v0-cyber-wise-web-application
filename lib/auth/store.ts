@@ -50,9 +50,21 @@ export async function createUser(input: {
     });
 
     return { ok: true, user };
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error creating user:", error);
-    return { ok: false, error: "Failed to create user" };
+    
+    // Provide more specific error messages
+    if (error.code === 'P2002') {
+      return { ok: false, error: "Username already exists" };
+    }
+    if (error.code === 'P2003') {
+      return { ok: false, error: "Database constraint violation" };
+    }
+    if (error.message?.includes('connect')) {
+      return { ok: false, error: "Database connection failed. Please check your database configuration." };
+    }
+    
+    return { ok: false, error: `Failed to create user: ${error.message || 'Unknown error'}` };
   }
 }
 

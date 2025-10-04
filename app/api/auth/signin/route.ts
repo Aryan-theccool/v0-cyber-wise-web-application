@@ -4,14 +4,8 @@ import { verifyUser } from "@/lib/auth/store";
 import { createSession, setSessionCookie } from "@/lib/auth/session";
 
 const SigninSchema = z.object({
-  username: z
-    .string()
-    .min(3, "Username must be at least 3 characters")
-    .max(30, "Username must not exceed 30 characters"),
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters")
-    .max(64, "Password must not exceed 64 characters"),
+  username: z.string().min(3, "Username required"),
+  password: z.string().min(6, "Password required"),
 });
 
 export async function POST(req: Request) {

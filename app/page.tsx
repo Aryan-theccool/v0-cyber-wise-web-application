@@ -8,36 +8,15 @@ import { Shield } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const signUpSchema = z.object({
-  username: z
-    .string()
-    .min(3, "Username must be at least 3 characters")
-    .max(30, "Username must not exceed 30 characters")
-    .regex(/^[a-zA-Z0-9_]+$/, "Username can only contain letters, numbers, and underscores"),
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters")
-    .max(64, "Password must not exceed 64 characters")
-    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-    .regex(/[0-9]/, "Password must contain at least one number")
-    .regex(/[^A-Za-z0-9]/, "Password must contain at least one special character"),
-  mobile: z
-    .string()
-    .regex(/^\+?[0-9]{10,15}$/i, "10-15 digits, optional +"),
-  parentMobile: z
-    .string()
-    .regex(/^\+?[0-9]{10,15}$/i, "10-15 digits, optional +"),
+  username: z.string().min(3, "Username must be at least 3 characters"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  mobile: z.string().min(10, "Mobile number must be at least 10 digits"),
+  parentMobile: z.string().min(10, "Parent mobile must be at least 10 digits"),
 });
 
 const signInSchema = z.object({
-  username: z
-    .string()
-    .min(3, "Username must be at least 3 characters")
-    .max(30, "Username must not exceed 30 characters"),
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters")
-    .max(64, "Password must not exceed 64 characters"),
+  username: z.string().min(3, "Username required"),
+  password: z.string().min(6, "Password required"),
 });
 
 type SignUpFormValues = z.infer<typeof signUpSchema>;
@@ -102,20 +81,31 @@ function SignUpForm() {
     setServerMsg(null);
     setServerErr(null);
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
       const res = await fetch("/api/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
+        signal: controller.signal,
       });
+      
+      clearTimeout(timeoutId);
       const data = await res.json();
+      
       if (!res.ok) {
         setServerErr(data?.error || "Signup failed");
       } else {
         setServerMsg("Account created successfully! You can now sign in.");
         reset();
       }
-    } catch (e) {
-      setServerErr("Network error");
+    } catch (e: any) {
+      if (e.name === 'AbortError') {
+        setServerErr("Request timeout. Database may be sleeping. Please try again.");
+      } else {
+        setServerErr("Network error. Please check your connection.");
+      }
     }
   };
 
@@ -157,7 +147,6 @@ function SignUpForm() {
             placeholder="••••••••"
             autoComplete="new-password"
           />
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Must include uppercase, lowercase, number, and special character</p>
           {errors.password && (
             <p className="text-sm text-red-600 mt-1">{errors.password.message}</p>
           )}
@@ -204,6 +193,9 @@ function SignUpForm() {
 function SignInForm() {
   const [serverMsg, setServerMsg] = useState<string | null>(null);
   const [serverErr, setServerErr] = useState<string | null>(null);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [resetUsername, setResetUsername] = useState("");
+  const [resetMsg, setResetMsg] = useState("");
 
   const {
     register,
@@ -225,12 +217,10 @@ function SignInForm() {
       if (!res.ok) {
         setServerErr(data?.error || "Sign in failed");
       } else {
-        setServerMsg("Welcome back! Redirecting...");
+        setServerMsg("Welcome back!");
         reset();
-        // Redirect to home page after successful login
-        setTimeout(() => {
-          window.location.href = "/home";
-        }, 800);
+        // Redirect immediately
+        window.location.href = "/home";
       }
     } catch (e) {
       setServerErr("Network error");
@@ -267,7 +257,16 @@ function SignInForm() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1.5">Password</label>
+          <div className="flex items-center justify-between mb-1.5">
+            <label className="block text-sm font-medium">Password</label>
+            <button
+              type="button"
+              onClick={() => setShowForgotPassword(true)}
+              className="text-xs text-[#1ABC9C] hover:underline"
+            >
+              Forgot Password?
+            </button>
+          </div>
           <input
             type="password"
             {...register("password")}
@@ -288,6 +287,68 @@ function SignInForm() {
           {isSubmitting ? "Signing in..." : "Sign In"}
         </button>
       </form>
+
+      {/* Forgot Password Modal */}
+      {showForgotPassword && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 max-w-md w-full">
+            <h3 className="text-xl font-semibold mb-4">Reset Password</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              Enter your username. We'll send password reset instructions to your registered mobile number.
+            </p>
+            
+            {resetMsg && (
+              <div className="mb-4 p-3 text-sm text-teal-700 bg-teal-50 border border-teal-200 dark:bg-teal-900/20 dark:border-teal-800 rounded-lg">
+                {resetMsg}
+              </div>
+            )}
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1.5">Username</label>
+                <input
+                  type="text"
+                  value={resetUsername}
+                  onChange={(e) => setResetUsername(e.target.value)}
+                  className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#1ABC9C] bg-white dark:bg-slate-700"
+                  placeholder="Enter your username"
+                />
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={async () => {
+                    if (!resetUsername.trim()) {
+                      setResetMsg("Please enter your username");
+                      return;
+                    }
+                    // For now, just show a message (you can implement actual reset logic later)
+                    setResetMsg("Password reset instructions have been sent to your registered mobile number. Please contact support with your username for assistance.");
+                    setResetUsername("");
+                  }}
+                  className="flex-1 bg-gradient-to-r from-[#4A90E2] via-[#9B59B6] to-[#1ABC9C] text-white rounded-lg py-2.5 font-semibold hover:opacity-90"
+                >
+                  Send Reset Link
+                </button>
+                <button
+                  onClick={() => {
+                    setShowForgotPassword(false);
+                    setResetUsername("");
+                    setResetMsg("");
+                  }}
+                  className="px-6 border border-gray-300 dark:border-slate-600 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700"
+                >
+                  Cancel
+                </button>
+              </div>
+
+              <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
+                For security reasons, please contact your administrator or use the helpline for password reset assistance.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

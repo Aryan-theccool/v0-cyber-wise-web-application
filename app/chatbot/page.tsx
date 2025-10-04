@@ -6,6 +6,7 @@ import { Shield, Send, ArrowLeft, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { AppNav } from "@/components/app-nav"
+import { useTranslation } from "@/lib/i18n/useTranslation"
 
 interface Message {
   id: string
@@ -14,18 +15,19 @@ interface Message {
   timestamp: Date
 }
 
-const quickReplies = [
-  { id: 1, text: "I feel bullied", emoji: "😔" },
-  { id: 2, text: "I was scammed", emoji: "⚠️" },
-  { id: 3, text: "I need help", emoji: "🆘" },
-  { id: 4, text: "Someone is harassing me", emoji: "😰" },
-]
-
 export default function ChatbotPage() {
+  const { t } = useTranslation();
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [mounted, setMounted] = useState(false)
+
+  const quickReplies = [
+    { id: 1, text: t("chatbot.quickReply1"), emoji: "😔" },
+    { id: 2, text: t("chatbot.quickReply2"), emoji: "⚠️" },
+    { id: 3, text: t("chatbot.quickReply3"), emoji: "🆘" },
+    { id: 4, text: t("chatbot.quickReply4"), emoji: "😰" },
+  ]
 
   useEffect(() => {
     setMounted(true)
@@ -33,12 +35,11 @@ export default function ChatbotPage() {
       {
         id: "1",
         role: "assistant",
-        content:
-          "Hi there! I'm here to support you. You're in a safe space now. How can I help you today? Feel free to share what's on your mind, or use one of the quick replies below.",
+        content: t("chatbot.greeting"),
         timestamp: new Date(),
       },
     ])
-  }, [])
+  }, [t])
 
   const handleSend = async (messageText?: string) => {
     const textToSend = messageText || input.trim()
@@ -57,23 +58,23 @@ export default function ChatbotPage() {
 
     // Simulate AI response
     setTimeout(() => {
+      // Build responses dynamically with current translations
+      const quickReply1 = t("chatbot.quickReply1");
+      const quickReply2 = t("chatbot.quickReply2");
+      const quickReply3 = t("chatbot.quickReply3");
+      const quickReply4 = t("chatbot.quickReply4");
+      
       const responses: Record<string, string> = {
-        "I feel bullied":
-          "I'm really sorry you're going through this. Bullying is never okay, and you deserve to feel safe. Can you tell me more about what's been happening? Remember, you're not alone in this.",
-        "I was scammed":
-          "I'm sorry to hear that happened to you. Scams can be really upsetting. First, know that it's not your fault - scammers are very sophisticated. Can you share what kind of scam it was? This will help me guide you on the next steps.",
-        "I need help":
-          "I'm here for you. You've taken a brave step by reaching out. Can you tell me what's troubling you? Whether it's cyberbullying, harassment, or something else, we'll work through this together.",
-        "Someone is harassing me":
-          "I'm so sorry you're experiencing harassment. That must be really difficult. Your safety and wellbeing are the most important things. Can you tell me more about the situation? Have you been able to document any of the harassment?",
+        [quickReply1]: t("chatbot.response1"),
+        [quickReply2]: t("chatbot.response2"),
+        [quickReply3]: t("chatbot.response3"),
+        [quickReply4]: t("chatbot.response4"),
       }
 
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content:
-          responses[textToSend] ||
-          "Thank you for sharing that with me. I want you to know that what you're feeling is valid, and you're not alone. Can you tell me more about the situation so I can better support you? Remember, everything you share here is confidential.",
+        content: responses[textToSend] || t("chatbot.defaultResponse"),
         timestamp: new Date(),
       }
 
@@ -99,12 +100,12 @@ export default function ChatbotPage() {
             </Button>
             <div className="flex items-center gap-2">
               <Shield className="h-5 w-5 text-primary" />
-              <span className="font-semibold">AI Support Chat</span>
+              <span className="font-semibold">{t("chatbot.title")}</span>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <div className="h-2 w-2 rounded-full bg-green-500"></div>
-            <span className="text-sm text-muted-foreground">Online</span>
+            <span className="text-sm text-muted-foreground">{t("common.online")}</span>
           </div>
         </div>
       </header>
@@ -139,7 +140,7 @@ export default function ChatbotPage() {
                 <div className="max-w-[80%] rounded-2xl border border-border bg-card px-4 py-3">
                   <div className="flex items-center gap-2">
                     <Loader2 className="h-4 w-4 animate-spin text-primary" />
-                    <span className="text-sm text-muted-foreground">Typing...</span>
+                    <span className="text-sm text-muted-foreground">{t("chatbot.typing")}</span>
                   </div>
                 </div>
               </div>
@@ -152,7 +153,7 @@ export default function ChatbotPage() {
       {messages.length <= 2 && (
         <div className="border-t border-border bg-card/50">
           <div className="container mx-auto max-w-3xl px-4 py-4">
-            <p className="mb-3 text-sm text-muted-foreground">Quick replies:</p>
+            <p className="mb-3 text-sm text-muted-foreground">{t("chatbot.quickRepliesLabel")}</p>
             <div className="flex flex-wrap gap-2">
               {quickReplies.map((reply) => (
                 <Button
@@ -185,7 +186,7 @@ export default function ChatbotPage() {
                   handleSend()
                 }
               }}
-              placeholder="Type your message here... (Press Enter to send)"
+              placeholder={t("chatbot.placeholder")}
               className="min-h-[60px] resize-none"
               disabled={isLoading}
             />
@@ -199,7 +200,7 @@ export default function ChatbotPage() {
             </Button>
           </div>
           <p className="mt-2 text-xs text-muted-foreground">
-            Your conversations are private and confidential. We're here to support you.
+            {t("chatbot.confidentialNote")}
           </p>
         </div>
       </div>

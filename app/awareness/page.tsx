@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Progress } from "@/components/ui/progress"
 import Image from "next/image"
+import { useTranslation } from "@/lib/i18n/useTranslation"
 
 interface CaseStudy {
   id: string
@@ -230,6 +231,7 @@ const quizQuestions: QuizQuestion[] = [
 ]
 
 export default function AwarenessPage() {
+  const { t } = useTranslation();
   const [selectedCase, setSelectedCase] = useState<CaseStudy | null>(null)
   const [showQuiz, setShowQuiz] = useState(false)
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -278,7 +280,7 @@ export default function AwarenessPage() {
             </Button>
             <div className="flex items-center gap-2">
               <Shield className="h-5 w-5 text-blue-600" />
-              <span className="font-semibold text-slate-900">Cyber Awareness Hub</span>
+              <span className="font-semibold text-slate-900">{t("awareness.title")}</span>
             </div>
           </div>
         </div>
@@ -287,10 +289,9 @@ export default function AwarenessPage() {
       <div className="container mx-auto max-w-6xl px-4 py-12">
         {/* Hero Section */}
         <div className="mb-16 text-center">
-          <h1 className="mb-4 text-5xl font-bold text-slate-900">Learn to Stay Safe Online</h1>
+          <h1 className="mb-4 text-5xl font-bold text-slate-900">{t("awareness.heroTitle")}</h1>
           <p className="mx-auto max-w-2xl text-lg leading-relaxed text-slate-600">
-            Explore real-world case studies and test your knowledge with our interactive quiz. Knowledge is your best
-            defense against cyber threats.
+            {t("awareness.heroDesc")}
           </p>
         </div>
 
@@ -298,8 +299,8 @@ export default function AwarenessPage() {
         <section className="mb-16">
           <div className="mb-8 flex items-center justify-between">
             <div>
-              <h2 className="text-3xl font-bold text-slate-900">Real-World Case Studies</h2>
-              <p className="mt-2 text-slate-600">Learn from real situations and how to handle them</p>
+              <h2 className="text-3xl font-bold text-slate-900">{t("awareness.caseStudiesTitle")}</h2>
+              <p className="mt-2 text-slate-600">{t("awareness.caseStudiesDesc")}</p>
             </div>
             <BookOpen className="h-8 w-8 text-blue-600" />
           </div>

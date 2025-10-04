@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { useTranslation } from "@/lib/i18n/useTranslation"
 
 // Demo data
 const dataByTimeframe = {
@@ -128,6 +129,7 @@ const dataByTimeframe = {
 }
 
 export default function DashboardPage() {
+  const { t } = useTranslation();
   const [timeRange, setTimeRange] = useState("6months")
 
   const currentData = useMemo(() => {
@@ -147,7 +149,7 @@ export default function DashboardPage() {
             </Button>
             <div className="flex items-center gap-2">
               <Shield className="h-5 w-5 text-primary" />
-              <span className="font-semibold">Counselor Dashboard</span>
+              <span className="font-semibold">{t("dashboard.title")}</span>
             </div>
           </div>
           <Select value={timeRange} onValueChange={setTimeRange}>
@@ -155,10 +157,10 @@ export default function DashboardPage() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="7days">Last 7 days</SelectItem>
-              <SelectItem value="30days">Last 30 days</SelectItem>
-              <SelectItem value="6months">Last 6 months</SelectItem>
-              <SelectItem value="1year">Last year</SelectItem>
+              <SelectItem value="7days">{t("dashboard.last7days")}</SelectItem>
+              <SelectItem value="30days">{t("dashboard.last30days")}</SelectItem>
+              <SelectItem value="6months">{t("dashboard.last6months")}</SelectItem>
+              <SelectItem value="1year">{t("dashboard.lastYear")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -169,52 +171,52 @@ export default function DashboardPage() {
         <div className="mb-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Reports</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("dashboard.totalReports")}</CardTitle>
               <AlertTriangle className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{currentData.stats.totalReports}</div>
               <p className="text-xs text-muted-foreground">
-                <span className="text-green-500">{currentData.stats.reportsTrend}</span> from last period
+                <span className="text-green-500">{currentData.stats.reportsTrend}</span> {t("dashboard.fromLastPeriod")}
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Active Cases</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("dashboard.activeCases")}</CardTitle>
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{currentData.stats.activeCases}</div>
               <p className="text-xs text-muted-foreground">
-                <span className="text-yellow-500">{currentData.stats.activeTrend}</span> new this period
+                <span className="text-yellow-500">{currentData.stats.activeTrend}</span> {t("dashboard.newThisPeriod")}
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Resolved</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("dashboard.resolved")}</CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{currentData.stats.resolved}</div>
               <p className="text-xs text-muted-foreground">
-                <span className="text-green-500">{currentData.stats.resolvedRate}</span> resolution rate
+                <span className="text-green-500">{currentData.stats.resolvedRate}</span> {t("dashboard.resolutionRate")}
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Avg Response Time</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("dashboard.avgResponseTime")}</CardTitle>
               <Calendar className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{currentData.stats.avgResponseTime}</div>
               <p className="text-xs text-muted-foreground">
-                <span className="text-green-500">{currentData.stats.responseImprovement}</span> improvement
+                <span className="text-green-500">{currentData.stats.responseImprovement}</span> {t("dashboard.improvement")}
               </p>
             </CardContent>
           </Card>
@@ -225,8 +227,8 @@ export default function DashboardPage() {
           {/* Incident Reports Chart */}
           <Card>
             <CardHeader>
-              <CardTitle>Incident Reports Over Time</CardTitle>
-              <CardDescription>Report submissions and resolutions for selected period</CardDescription>
+              <CardTitle>{t("dashboard.incidentReportsTitle")}</CardTitle>
+              <CardDescription>{t("dashboard.incidentReportsDesc")}</CardDescription>
             </CardHeader>
             <CardContent className="overflow-hidden">
               <ChartContainer
@@ -257,8 +259,8 @@ export default function DashboardPage() {
           {/* Mood Trends Chart */}
           <Card>
             <CardHeader>
-              <CardTitle>Student Mood Trends</CardTitle>
-              <CardDescription>Mood tracking from journal entries for selected period</CardDescription>
+              <CardTitle>{t("dashboard.moodTrendsTitle")}</CardTitle>
+              <CardDescription>{t("dashboard.moodTrendsDesc")}</CardDescription>
             </CardHeader>
             <CardContent className="overflow-hidden">
               <ChartContainer
@@ -295,8 +297,8 @@ export default function DashboardPage() {
         {/* Recent Reports Table */}
         <Card>
           <CardHeader>
-            <CardTitle>Recent Reports</CardTitle>
-            <CardDescription>Latest incident reports requiring attention</CardDescription>
+            <CardTitle>{t("dashboard.recentReports")}</CardTitle>
+            <CardDescription>{t("dashboard.recentReportsDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
@@ -369,7 +371,7 @@ export default function DashboardPage() {
                       {report.status}
                     </span>
                     <Button variant="ghost" size="sm">
-                      View
+                      {t("dashboard.view")}
                     </Button>
                   </div>
                 </div>

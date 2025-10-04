@@ -15,6 +15,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
+import { useTranslation } from "@/lib/i18n/useTranslation"
 
 interface JournalEntry {
   id: string
@@ -48,6 +49,7 @@ const demoEntries: JournalEntry[] = [
 ]
 
 export default function JournalPage() {
+  const { t } = useTranslation();
   const [entries, setEntries] = useState<JournalEntry[]>([])
   const [newEntry, setNewEntry] = useState("")
   const [selectedMood, setSelectedMood] = useState<"happy" | "neutral" | "sad">("neutral")
@@ -110,26 +112,26 @@ export default function JournalPage() {
             </Button>
             <div className="flex items-center gap-2">
               <Shield className="h-5 w-5 text-primary" />
-              <span className="font-semibold">Digital Journal</span>
+              <span className="font-semibold">{t("journal.title")}</span>
             </div>
           </div>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
               <Button>
                 <Plus className="mr-2 h-4 w-4" />
-                New Entry
+                {t("journal.newEntry")}
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[600px]">
               <DialogHeader>
-                <DialogTitle>Create Journal Entry</DialogTitle>
+                <DialogTitle>{t("journal.createEntry")}</DialogTitle>
                 <DialogDescription>
-                  Express your feelings in this safe, private space. Your entries are only visible to you.
+                  {t("journal.entryDescription")}
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-4 py-4">
                 <div>
-                  <Label className="mb-2 block text-sm font-medium">How are you feeling?</Label>
+                  <Label className="mb-2 block text-sm font-medium">{t("journal.howFeeling")}</Label>
                   <div className="flex gap-3">
                     <button
                       type="button"
@@ -141,7 +143,7 @@ export default function JournalPage() {
                       }`}
                     >
                       <Smile className="h-5 w-5 text-green-500" />
-                      <span className="text-sm font-medium">Happy</span>
+                      <span className="text-sm font-medium">{t("journal.happy")}</span>
                     </button>
                     <button
                       type="button"
@@ -153,7 +155,7 @@ export default function JournalPage() {
                       }`}
                     >
                       <Meh className="h-5 w-5 text-yellow-500" />
-                      <span className="text-sm font-medium">Neutral</span>
+                      <span className="text-sm font-medium">{t("journal.neutral")}</span>
                     </button>
                     <button
                       type="button"
@@ -165,29 +167,29 @@ export default function JournalPage() {
                       }`}
                     >
                       <Frown className="h-5 w-5 text-red-500" />
-                      <span className="text-sm font-medium">Sad</span>
+                      <span className="text-sm font-medium">{t("journal.sad")}</span>
                     </button>
                   </div>
                 </div>
                 <div>
                   <Label htmlFor="entry-content" className="mb-2 block text-sm font-medium">
-                    What's on your mind?
+                    {t("journal.whatsOnMind")}
                   </Label>
                   <Textarea
                     id="entry-content"
                     value={newEntry}
                     onChange={(e) => setNewEntry(e.target.value)}
-                    placeholder="Write about your day, your feelings, or anything you'd like to express..."
+                    placeholder={t("journal.entryPlaceholder")}
                     className="min-h-[200px] resize-none"
                   />
                 </div>
               </div>
               <div className="flex gap-2">
                 <Button onClick={handleSaveEntry} disabled={!newEntry.trim()} className="flex-1">
-                  Save Entry
+                  {t("journal.saveEntry")}
                 </Button>
                 <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="flex-1 bg-transparent">
-                  Cancel
+                  {t("common.cancel")}
                 </Button>
               </div>
             </DialogContent>
@@ -199,17 +201,16 @@ export default function JournalPage() {
         {/* Welcome Card */}
         <Card className="mb-8 border-primary/20 bg-primary/5">
           <CardHeader>
-            <CardTitle>Your Safe Space</CardTitle>
+            <CardTitle>{t("journal.safeSpace")}</CardTitle>
             <CardDescription>
-              This is your private journal where you can express your thoughts and feelings freely. No one else can see
-              your entries.
+              {t("journal.safeSpaceDesc")}
             </CardDescription>
           </CardHeader>
         </Card>
 
         {/* Entries Timeline */}
         <div className="space-y-6">
-          <h2 className="text-2xl font-bold">Your Entries</h2>
+          <h2 className="text-2xl font-bold">{t("journal.yourEntries")}</h2>
 
           {entries.length === 0 ? (
             <Card>
@@ -217,13 +218,13 @@ export default function JournalPage() {
                 <div className="mb-4 rounded-full bg-muted p-4">
                   <Calendar className="h-8 w-8 text-muted-foreground" />
                 </div>
-                <h3 className="mb-2 text-lg font-semibold">No entries yet</h3>
+                <h3 className="mb-2 text-lg font-semibold">{t("journal.noEntries")}</h3>
                 <p className="mb-4 text-center text-sm text-muted-foreground">
-                  Start journaling to track your thoughts and feelings
+                  {t("journal.noEntriesDesc")}
                 </p>
                 <Button onClick={() => setIsDialogOpen(true)}>
                   <Plus className="mr-2 h-4 w-4" />
-                  Create First Entry
+                  {t("journal.createFirst")}
                 </Button>
               </CardContent>
             </Card>
@@ -260,25 +261,25 @@ export default function JournalPage() {
         {entries.length > 0 && (
           <Card className="mt-8">
             <CardHeader>
-              <CardTitle>Mood Insights</CardTitle>
-              <CardDescription>Your emotional journey over time</CardDescription>
+              <CardTitle>{t("journal.moodInsights")}</CardTitle>
+              <CardDescription>{t("journal.emotionalJourney")}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 md:grid-cols-3">
                 <div className="rounded-lg border border-green-500/20 bg-green-500/5 p-4 text-center">
                   <Smile className="mx-auto mb-2 h-8 w-8 text-green-500" />
                   <div className="text-2xl font-bold">{entries.filter((e) => e.mood === "happy").length}</div>
-                  <div className="text-sm text-muted-foreground">Happy Days</div>
+                  <div className="text-sm text-muted-foreground">{t("journal.happyDays")}</div>
                 </div>
                 <div className="rounded-lg border border-yellow-500/20 bg-yellow-500/5 p-4 text-center">
                   <Meh className="mx-auto mb-2 h-8 w-8 text-yellow-500" />
                   <div className="text-2xl font-bold">{entries.filter((e) => e.mood === "neutral").length}</div>
-                  <div className="text-sm text-muted-foreground">Neutral Days</div>
+                  <div className="text-sm text-muted-foreground">{t("journal.neutralDays")}</div>
                 </div>
                 <div className="rounded-lg border border-red-500/20 bg-red-500/5 p-4 text-center">
                   <Frown className="mx-auto mb-2 h-8 w-8 text-red-500" />
                   <div className="text-2xl font-bold">{entries.filter((e) => e.mood === "sad").length}</div>
-                  <div className="text-sm text-muted-foreground">Difficult Days</div>
+                  <div className="text-sm text-muted-foreground">{t("journal.difficultDays")}</div>
                 </div>
               </div>
             </CardContent>

@@ -1,5 +1,3 @@
-"use client"
-
 interface CyberWiseLogoProps {
   className?: string
   size?: "sm" | "md" | "lg" | "xl"
@@ -22,6 +20,7 @@ export function CyberWiseLogo({ className = "", size = "lg" }: CyberWiseLogoProp
           WebkitTextFillColor: "transparent",
           backgroundClip: "text",
         }}
+        suppressHydrationWarning
       >
         CyberWise
       </span>

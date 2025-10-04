@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { MobileNav } from "@/components/mobile-nav"
 import { NavLink } from "@/components/nav-link"
+import { useTranslation } from "@/lib/i18n/useTranslation"
 
 // International Helplines data
 const internationalHelplines = [
@@ -97,6 +98,8 @@ const internationalHelplines = [
 ]
 
 export default function HelplinePage() {
+  const { t } = useTranslation();
+  
   return (
     <div className="min-h-screen">
       {/* Navigation */}
@@ -119,18 +122,18 @@ export default function HelplinePage() {
           </Link>
 
           <div className="hidden items-center gap-1 md:flex">
-            <NavLink href="/">Home</NavLink>
-            <NavLink href="/chatbot">Chatbot</NavLink>
-            <NavLink href="/report">Report</NavLink>
-            <NavLink href="/journal">Journal</NavLink>
-            <NavLink href="/student-dashboard">My Progress</NavLink>
-            <NavLink href="/dashboard">Dashboard</NavLink>
-            <NavLink href="/awareness">Awareness</NavLink>
-            <NavLink href="/helpline">Helpline</NavLink>
+            <NavLink href="/">{t("nav.home")}</NavLink>
+            <NavLink href="/chatbot">{t("nav.chatbot")}</NavLink>
+            <NavLink href="/report">{t("nav.report")}</NavLink>
+            <NavLink href="/journal">{t("nav.journal")}</NavLink>
+            <NavLink href="/student-dashboard">{t("nav.progress")}</NavLink>
+            <NavLink href="/dashboard">{t("nav.dashboard")}</NavLink>
+            <NavLink href="/awareness">{t("nav.awareness")}</NavLink>
+            <NavLink href="/helpline">{t("nav.helpline")}</NavLink>
           </div>
 
           <Button size="sm" className="hidden hover:bg-[#1ABC9C] transition-colors md:inline-flex" asChild>
-            <Link href="/chatbot">Get Support</Link>
+            <Link href="/chatbot">{t("home.getSupport")}</Link>
           </Button>
 
           <MobileNav />
@@ -142,16 +145,15 @@ export default function HelplinePage() {
         <div className="mx-auto max-w-3xl text-center">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-destructive/20 bg-destructive/10 px-4 py-1.5 text-sm text-destructive animate-fade-in">
             <AlertCircle className="h-4 w-4" />
-            Emergency Support Available 24/7
+            {t("helpline.emergencySupport")}
           </div>
 
           <h1 className="mb-4 text-balance text-4xl font-bold tracking-tight md:text-6xl animate-fade-in-up">
-            Helpline & Support Resources
+            {t("helpline.title")}
           </h1>
 
           <p className="text-pretty text-lg text-muted-foreground animate-fade-in-up">
-            Access emergency helplines, upcoming webinars, and support resources. You're not alone – help is always
-            available.
+            {t("helpline.description")}
           </p>
         </div>
       </section>
@@ -162,16 +164,16 @@ export default function HelplinePage() {
           <div className="mb-8 flex items-center gap-3">
             <Globe className="h-6 w-6 text-primary" />
             <div>
-              <h2 className="text-3xl font-bold">{region.country} Helplines</h2>
+              <h2 className="text-3xl font-bold">{region.country} {t("helpline.helplinesLabel")}</h2>
               <p className="text-muted-foreground">
-                Immediate support when you need it most. All helplines are confidential and available 24/7.
+                {t("helpline.immediateSupport")}
               </p>
             </div>
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {region.helplines.map((helpline) => (
-              <HelplineCard key={helpline.title} {...helpline} />
+              <HelplineCard key={helpline.title} {...helpline} t={t} />
             ))}
           </div>
         </section>
@@ -180,9 +182,9 @@ export default function HelplinePage() {
       {/* Upcoming Webinars */}
       <section className="container mx-auto px-4 py-16">
         <div className="mb-8">
-          <h2 className="mb-2 text-3xl font-bold">Upcoming Webinars & Seminars</h2>
+          <h2 className="mb-2 text-3xl font-bold">{t("helpline.webinarsTitle")}</h2>
           <p className="text-muted-foreground">
-            Join our educational sessions to learn about cyber safety, digital wellness, and online protection.
+            {t("helpline.webinarsDesc")}
           </p>
         </div>
 
@@ -241,17 +243,16 @@ export default function HelplinePage() {
       {/* Additional Resources */}
       <section className="container mx-auto px-4 py-16">
         <div className="rounded-2xl border border-border bg-card p-8 md:p-12">
-          <h2 className="mb-4 text-2xl font-bold">Need Immediate Help?</h2>
+          <h2 className="mb-4 text-2xl font-bold">{t("report.needHelp")}</h2>
           <p className="mb-6 text-muted-foreground">
-            If you're in immediate danger or experiencing a crisis, please call emergency services (112) or contact one
-            of the helplines above. You can also use our AI chatbot for immediate support and guidance.
+            {t("helpline.crisisInstructions")}
           </p>
           <div className="flex flex-col gap-4 sm:flex-row">
             <Button size="lg" className="hover:bg-[#1ABC9C] transition-colors" asChild>
-              <Link href="/chatbot">Start Chat Support</Link>
+              <Link href="/chatbot">{t("helpline.startChat")}</Link>
             </Button>
             <Button size="lg" variant="outline" className="bg-transparent hover:bg-muted transition-colors" asChild>
-              <Link href="/report">Submit Anonymous Report</Link>
+              <Link href="/report">{t("helpline.submitReport")}</Link>
             </Button>
           </div>
         </div>
@@ -260,7 +261,7 @@ export default function HelplinePage() {
       {/* Footer */}
       <footer className="border-t border-border py-8">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          <p>© 2025 CyberWise. Built with care for student safety and wellbeing.</p>
+          <p>{t("home.footerText")}</p>
         </div>
       </footer>
     </div>
@@ -273,9 +274,10 @@ interface HelplineCardProps {
   email: string
   description: string
   color: "primary" | "secondary" | "accent" | "destructive"
+  t: (key: string) => string
 }
 
-function HelplineCard({ title, number, email, description, color }: HelplineCardProps) {
+function HelplineCard({ title, number, email, description, color, t }: HelplineCardProps) {
   const colorClasses = {
     primary: "border-primary/50 bg-primary/5 hover:border-primary",
     secondary: "border-secondary/50 bg-secondary/5 hover:border-secondary",
@@ -310,7 +312,7 @@ function HelplineCard({ title, number, email, description, color }: HelplineCard
           <Button size="sm" className="w-full hover:bg-[#1ABC9C] transition-colors" asChild>
             <a href={`tel:${number.replace(/\s/g, "")}`}>
               <Phone className="mr-2 h-4 w-4" />
-              Call Now
+              {t("helpline.callNow")}
             </a>
           </Button>
           <Button
@@ -321,7 +323,7 @@ function HelplineCard({ title, number, email, description, color }: HelplineCard
           >
             <a href={`mailto:${email}`}>
               <Mail className="mr-2 h-4 w-4" />
-              Send Email
+              {t("helpline.sendEmail")}
             </a>
           </Button>
         </div>

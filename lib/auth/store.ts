@@ -1,0 +1,85 @@
+import bcrypt from "bcryptjs";
+import { prisma } from "@/lib/prisma";
+
+export type UserRecord = {
+  id: string;
+  username: string;
+  mobile: string;
+  parentMobile: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export async function createUser(input: {
+  username: string;
+  password: string;
+  mobile: string;
+  parentMobile: string;
+}): Promise<{ ok: true; user: UserRecord } | { ok: false; error: string }> {
+  const { username, password, mobile, parentMobile } = input;
+
+  try {
+    // Check if username already exists
+    const existing = await prisma.user.findUnique({
+      where: { username: username.toLowerCase() },
+    });
+
+    if (existing) {
+      return { ok: false, error: "Username already exists" };
+    }
+
+    // Hash password
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    // Create user in database
+    const user = await prisma.user.create({
+      data: {
+        username: username.toLowerCase(),
+        passwordHash,
+        mobile,
+        parentMobile,
+      },
+      select: {
+        id: true,
+        username: true,
+        mobile: true,
+        parentMobile: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    return { ok: true, user };
+  } catch (error) {
+    console.error("Error creating user:", error);
+    return { ok: false, error: "Failed to create user" };
+  }
+}
+
+export async function verifyUser(input: {
+  username: string;
+  password: string;
+}): Promise<{ ok: true; user: UserRecord } | { ok: false; error: string }> {
+  const { username, password } = input;
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { username: username.toLowerCase() },
+    });
+
+    if (!user) {
+      return { ok: false, error: "Invalid credentials" };
+    }
+
+    const match = await bcrypt.compare(password, user.passwordHash);
+    if (!match) {
+      return { ok: false, error: "Invalid credentials" };
+    }
+
+    const { passwordHash: _omit, ...safe } = user;
+    return { ok: true, user: safe };
+  } catch (error) {
+    console.error("Error verifying user:", error);
+    return { ok: false, error: "Failed to verify user" };
+  }
+}

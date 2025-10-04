@@ -139,7 +139,7 @@ function SignUpForm() {
           <label className="block text-sm font-medium mb-1.5">Username</label>
           <input
             {...register("username")}
-            className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#1ABC9C] focus:border-transparent bg-white dark:bg-slate-700 transition-all"
+            className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#1ABC9C] bg-white dark:bg-slate-700"
             placeholder="johndoe"
             autoComplete="username"
           />
@@ -153,7 +153,7 @@ function SignUpForm() {
           <input
             type="password"
             {...register("password")}
-            className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#1ABC9C] focus:border-transparent bg-white dark:bg-slate-700 transition-all"
+            className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#1ABC9C] bg-white dark:bg-slate-700"
             placeholder="••••••••"
             autoComplete="new-password"
           />
@@ -167,7 +167,7 @@ function SignUpForm() {
           <label className="block text-sm font-medium mb-1.5">Your mobile number</label>
           <input
             {...register("mobile")}
-            className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#1ABC9C] focus:border-transparent bg-white dark:bg-slate-700 transition-all"
+            className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#1ABC9C] bg-white dark:bg-slate-700"
             placeholder="+911234567890"
             autoComplete="tel"
           />
@@ -180,7 +180,7 @@ function SignUpForm() {
           <label className="block text-sm font-medium mb-1.5">Parent's mobile number</label>
           <input
             {...register("parentMobile")}
-            className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#1ABC9C] focus:border-transparent bg-white dark:bg-slate-700 transition-all"
+            className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#1ABC9C] bg-white dark:bg-slate-700"
             placeholder="+911234567891"
             autoComplete="tel"
           />
@@ -191,7 +191,7 @@ function SignUpForm() {
 
         <button
           type="submit"
-          className="w-full bg-gradient-to-r from-[#4A90E2] via-[#9B59B6] to-[#1ABC9C] text-white rounded-lg py-3 font-semibold disabled:opacity-60 hover:shadow-lg hover:scale-[1.02] transition-all duration-200"
+          className="w-full bg-gradient-to-r from-[#4A90E2] via-[#9B59B6] to-[#1ABC9C] text-white rounded-lg py-3 font-semibold disabled:opacity-60 hover:opacity-90"
           disabled={isSubmitting}
         >
           {isSubmitting ? "Creating account..." : "Sign Up"}
@@ -227,10 +227,10 @@ function SignInForm() {
       } else {
         setServerMsg("Welcome back! Redirecting...");
         reset();
-        // Redirect to dashboard or main app after successful login
+        // Redirect to home page after successful login
         setTimeout(() => {
-          window.location.href = "/dashboard";
-        }, 1500);
+          window.location.href = "/home";
+        }, 800);
       }
     } catch (e) {
       setServerErr("Network error");
@@ -257,7 +257,7 @@ function SignInForm() {
           <label className="block text-sm font-medium mb-1.5">Username</label>
           <input
             {...register("username")}
-            className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#1ABC9C] focus:border-transparent bg-white dark:bg-slate-700 transition-all"
+            className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#1ABC9C] bg-white dark:bg-slate-700"
             placeholder="johndoe"
             autoComplete="username"
           />
@@ -271,7 +271,7 @@ function SignInForm() {
           <input
             type="password"
             {...register("password")}
-            className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#1ABC9C] focus:border-transparent bg-white dark:bg-slate-700 transition-all"
+            className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#1ABC9C] bg-white dark:bg-slate-700"
             placeholder="••••••••"
             autoComplete="current-password"
           />
@@ -282,7 +282,7 @@ function SignInForm() {
 
         <button
           type="submit"
-          className="w-full bg-gradient-to-r from-[#4A90E2] via-[#9B59B6] to-[#1ABC9C] text-white rounded-lg py-3 font-semibold disabled:opacity-60 hover:shadow-lg hover:scale-[1.02] transition-all duration-200"
+          className="w-full bg-gradient-to-r from-[#4A90E2] via-[#9B59B6] to-[#1ABC9C] text-white rounded-lg py-3 font-semibold disabled:opacity-60 hover:opacity-90"
           disabled={isSubmitting}
         >
           {isSubmitting ? "Signing in..." : "Sign In"}

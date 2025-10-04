@@ -1,10 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Shield, Send, ArrowLeft, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
+import { AppNav } from "@/components/app-nav"
 
 interface Message {
   id: string
@@ -21,17 +22,23 @@ const quickReplies = [
 ]
 
 export default function ChatbotPage() {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "1",
-      role: "assistant",
-      content:
-        "Hi there! I'm here to support you. You're in a safe space now. How can I help you today? Feel free to share what's on your mind, or use one of the quick replies below.",
-      timestamp: new Date(),
-    },
-  ])
+  const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+    setMessages([
+      {
+        id: "1",
+        role: "assistant",
+        content:
+          "Hi there! I'm here to support you. You're in a safe space now. How can I help you today? Feel free to share what's on your mind, or use one of the quick replies below.",
+        timestamp: new Date(),
+      },
+    ])
+  }, [])
 
   const handleSend = async (messageText?: string) => {
     const textToSend = messageText || input.trim()
@@ -114,13 +121,15 @@ export default function ChatbotPage() {
                   }`}
                 >
                   <p className="text-sm leading-relaxed">{message.content}</p>
-                  <p
-                    className={`mt-1 text-xs ${
-                      message.role === "user" ? "text-primary-foreground/70" : "text-muted-foreground"
-                    }`}
-                  >
-                    {message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                  </p>
+                  {mounted && (
+                    <p
+                      className={`mt-1 text-xs ${
+                        message.role === "user" ? "text-primary-foreground/70" : "text-muted-foreground"
+                      }`}
+                    >
+                      {message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                    </p>
+                  )}
                 </div>
               </div>
             ))}

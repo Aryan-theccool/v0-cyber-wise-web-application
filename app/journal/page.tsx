@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Shield, ArrowLeft, Plus, Smile, Meh, Frown, Calendar } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -48,10 +48,16 @@ const demoEntries: JournalEntry[] = [
 ]
 
 export default function JournalPage() {
-  const [entries, setEntries] = useState<JournalEntry[]>(demoEntries)
+  const [entries, setEntries] = useState<JournalEntry[]>([])
   const [newEntry, setNewEntry] = useState("")
   const [selectedMood, setSelectedMood] = useState<"happy" | "neutral" | "sad">("neutral")
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+    setEntries(demoEntries)
+  }, [])
 
   const handleSaveEntry = () => {
     if (!newEntry.trim()) return

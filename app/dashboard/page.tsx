@@ -1,14 +1,25 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, memo } from "react"
 import Link from "next/link"
 import { Shield, ArrowLeft, TrendingUp, AlertTriangle, Users, Calendar } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import dynamic from "next/dynamic"
 import { useTranslation } from "@/lib/i18n/useTranslation"
+
+// Lazy load heavy chart components
+const AreaChart = dynamic(() => import("recharts").then(mod => ({ default: mod.AreaChart })), { ssr: false })
+const BarChart = dynamic(() => import("recharts").then(mod => ({ default: mod.BarChart })), { ssr: false })
+const Area = dynamic(() => import("recharts").then(mod => ({ default: mod.Area })), { ssr: false })
+const Bar = dynamic(() => import("recharts").then(mod => ({ default: mod.Bar })), { ssr: false })
+const CartesianGrid = dynamic(() => import("recharts").then(mod => ({ default: mod.CartesianGrid })), { ssr: false })
+const XAxis = dynamic(() => import("recharts").then(mod => ({ default: mod.XAxis })), { ssr: false })
+const YAxis = dynamic(() => import("recharts").then(mod => ({ default: mod.YAxis })), { ssr: false })
+const ChartContainer = dynamic(() => import("@/components/ui/chart").then(mod => ({ default: mod.ChartContainer })), { ssr: false })
+const ChartTooltip = dynamic(() => import("@/components/ui/chart").then(mod => ({ default: mod.ChartTooltip })), { ssr: false })
+const ChartTooltipContent = dynamic(() => import("@/components/ui/chart").then(mod => ({ default: mod.ChartTooltipContent })), { ssr: false })
 
 // Demo data
 const dataByTimeframe = {

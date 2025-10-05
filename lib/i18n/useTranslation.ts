@@ -1,39 +1,38 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useTransition } from "react";
 import { getMessages, getLocale, type Locale } from "./translations";
 
 export function useTranslation() {
-  // Always start with "en" to prevent hydration mismatch
-  // Will update to correct locale after mount
+  // Start with "en" to prevent hydration mismatch
   const [locale, setLocale] = useState<Locale>("en");
-  const [isMounted, setIsMounted] = useState(false);
+  const [isPending, startTransition] = useTransition();
   
   const messages = useMemo(() => getMessages(locale), [locale]);
 
-  // Load locale from localStorage after mount to prevent hydration mismatch
+  // Load locale immediately after mount
   useEffect(() => {
-    setIsMounted(true);
     const currentLocale = getLocale();
     if (currentLocale !== locale) {
-      setLocale(currentLocale);
+      // Use transition for smooth update
+      startTransition(() => {
+        setLocale(currentLocale);
+      });
     }
-  }, []);
-
-  useEffect(() => {
-    if (!isMounted) return;
 
     // Listen for language changes
     const handleStorageChange = () => {
       const newLocale = getLocale();
       if (newLocale !== locale) {
-        setLocale(newLocale);
+        startTransition(() => {
+          setLocale(newLocale);
+        });
       }
     };
 
     window.addEventListener("storage", handleStorageChange);
     return () => window.removeEventListener("storage", handleStorageChange);
-  }, [locale, isMounted]);
+  }, [locale]);
 
   const t = useCallback((key: string, replacements?: Record<string, string | number>): string => {
     const keys = key.split(".");

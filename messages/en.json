@@ -236,7 +236,17 @@
     "womenHelpline": "Women Helpline",
     "mentalHealth": "Mental Health Support",
     "emergency": "Emergency Services",
-    "callnow": "Call Now"
+    "emergencySupport": "Emergency Support Available 24/7",
+    "helplinesLabel": "Helplines",
+    "immediateSupport": "Immediate support when you need it most. All helplines are confidential and available 24/7.",
+    "webinarsTitle": "Upcoming Webinars & Seminars",
+    "webinarsDesc": "Join our educational sessions to learn about cybersecurity, digital wellness, and online safety.",
+    "crisisInstructions": "If you are in immediate danger or experiencing a crisis, please call emergency services (112) or contact one of the helplines above. You can also use our AI chatbot for immediate support and guidance.",
+    "startChat": "Start Chat Support",
+    "submitReport": "Submit Anonymous Report",
+    "callNow": "Call Now",
+    "callnow": "Call Now",
+    "sendEmail": "Send Email"
   },
   "profile": {
     "title": "Profile Settings",

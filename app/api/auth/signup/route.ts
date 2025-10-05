@@ -28,8 +28,16 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: "Signup successful", user: result.user });
   } catch (e: any) {
     console.error("Signup error:", e);
+    
+    // Check for database connection errors
+    if (e.message?.includes('connect') || e.code === 'ECONNREFUSED' || e.code === 'P1001') {
+      return NextResponse.json({ 
+        error: "Database connection failed. Please ensure your database is running and .env file is configured correctly." 
+      }, { status: 503 });
+    }
+    
     return NextResponse.json({ 
-      error: "Database connection failed. Please check your internet connection and try again." 
+      error: e.message || "Failed to create account. Please try again." 
     }, { status: 500 });
   }
 }

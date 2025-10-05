@@ -29,6 +29,7 @@ export function AppNav() {
         <div className="hidden items-center gap-1 md:flex">
           <NavLink href="/home">{t("nav.home")}</NavLink>
           <NavLink href="/chatbot">{t("nav.chatbot")}</NavLink>
+          <NavLink href="/harassment-detector">{t("nav.detector")}</NavLink>
           <NavLink href="/report">{t("nav.report")}</NavLink>
           <NavLink href="/journal">{t("nav.journal")}</NavLink>
           <NavLink href="/student-dashboard">{t("nav.myProgress")}</NavLink>

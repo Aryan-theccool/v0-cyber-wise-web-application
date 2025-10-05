@@ -126,7 +126,7 @@ export default function HelplinePage() {
             <NavLink href="/chatbot">{t("nav.chatbot")}</NavLink>
             <NavLink href="/report">{t("nav.report")}</NavLink>
             <NavLink href="/journal">{t("nav.journal")}</NavLink>
-            <NavLink href="/student-dashboard">{t("nav.progress")}</NavLink>
+            <NavLink href="/student-dashboard">{t("nav.myProgress")}</NavLink>
             <NavLink href="/dashboard">{t("nav.dashboard")}</NavLink>
             <NavLink href="/awareness">{t("nav.awareness")}</NavLink>
             <NavLink href="/helpline">{t("nav.helpline")}</NavLink>
@@ -164,7 +164,7 @@ export default function HelplinePage() {
           <div className="mb-8 flex items-center gap-3">
             <Globe className="h-6 w-6 text-primary" />
             <div>
-              <h2 className="text-3xl font-bold">{region.country} {t("helpline.helplinesLabel")}</h2>
+              <h2 className="text-3xl font-bold">{region.country} {t("helpline.title")}</h2>
               <p className="text-muted-foreground">
                 {t("helpline.immediateSupport")}
               </p>

@@ -1,41 +1,41 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { getMessages, getLocale, type Locale } from "./translations";
 
 export function useTranslation() {
-  // Initialize with the current locale from localStorage immediately
-  const [locale, setLocale] = useState<Locale>(() => {
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("preferredLanguage");
-      if (stored === "en" || stored === "hi") {
-        return stored;
-      }
-    }
-    return "en";
-  });
+  // Always start with "en" to prevent hydration mismatch
+  // Will update to correct locale after mount
+  const [locale, setLocale] = useState<Locale>("en");
+  const [isMounted, setIsMounted] = useState(false);
   
-  const [messages, setMessages] = useState(() => getMessages(locale));
-  const [mounted, setMounted] = useState(false);
+  const messages = useMemo(() => getMessages(locale), [locale]);
+
+  // Load locale from localStorage after mount to prevent hydration mismatch
+  useEffect(() => {
+    setIsMounted(true);
+    const currentLocale = getLocale();
+    if (currentLocale !== locale) {
+      setLocale(currentLocale);
+    }
+  }, []);
 
   useEffect(() => {
-    setMounted(true);
-    const currentLocale = getLocale();
-    setLocale(currentLocale);
-    setMessages(getMessages(currentLocale));
+    if (!isMounted) return;
 
     // Listen for language changes
     const handleStorageChange = () => {
       const newLocale = getLocale();
-      setLocale(newLocale);
-      setMessages(getMessages(newLocale));
+      if (newLocale !== locale) {
+        setLocale(newLocale);
+      }
     };
 
     window.addEventListener("storage", handleStorageChange);
     return () => window.removeEventListener("storage", handleStorageChange);
-  }, []);
+  }, [locale, isMounted]);
 
-  const t = (key: string, replacements?: Record<string, string | number>): string => {
+  const t = useCallback((key: string, replacements?: Record<string, string | number>): string => {
     const keys = key.split(".");
     let value: any = messages;
 
@@ -57,7 +57,7 @@ export function useTranslation() {
     }
 
     return result;
-  };
+  }, [messages]);
 
   return { t, locale };
 }

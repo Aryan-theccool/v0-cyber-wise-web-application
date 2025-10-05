@@ -111,6 +111,8 @@ function SignUpForm() {
         setServerErr(data?.error || t("auth.signupFailed"));
       } else {
         setServerMsg(t("auth.accountCreated"));
+        // Save username to localStorage for profile display
+        localStorage.setItem('username', values.username);
         reset();
       }
     } catch (e: any) {
@@ -237,6 +239,8 @@ function SignInForm() {
         setServerErr(data?.error || t("auth.signinFailed"));
       } else {
         setServerMsg(t("auth.welcomeMessage"));
+        // Save username to localStorage for profile display
+        localStorage.setItem('username', values.username);
         reset();
         // Redirect immediately
         window.location.href = "/home";

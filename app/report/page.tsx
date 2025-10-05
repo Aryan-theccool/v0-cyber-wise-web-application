@@ -4,12 +4,13 @@ import type React from "react"
 
 import { useState } from "react"
 import Link from "next/link"
-import { Shield, ArrowLeft, Upload, CheckCircle2, AlertCircle } from "lucide-react"
+import { Shield, ArrowLeft, Upload, CheckCircle2, AlertCircle, Mail } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Checkbox } from "@/components/ui/checkbox"
 import { useTranslation } from "@/lib/i18n/useTranslation"
 
 export default function ReportPage() {
@@ -17,6 +18,7 @@ export default function ReportPage() {
   const [incidentType, setIncidentType] = useState("")
   const [description, setDescription] = useState("")
   const [file, setFile] = useState<File | null>(null)
+  const [shareWithCybercrime, setShareWithCybercrime] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -30,13 +32,79 @@ export default function ReportPage() {
     e.preventDefault()
     setIsSubmitting(true)
 
-    // Simulate submission
+    // Simulate submission delay (1.5 seconds)
     setTimeout(() => {
       setIsSubmitting(false)
       setShowSuccess(true)
+
+      // ========================================
+      // 📧 EMAIL AUTOMATION LOGIC (CONDITIONAL)
+      // ========================================
+      // Only send email to cybercrime branch if user checked the box
+      // This gives users control over whether to escalate to authorities
+      
+      if (shareWithCybercrime) {
+        // User opted to share with cybercrime authorities
+        console.log("✅ User opted to share with Cyber Crime Branch - Opening email client...")
+        
+        // Email recipient - Official cybercrime branch (CyberDost)
+        const email = "cyberdost@mha.gov.in"
+        
+        // Email subject - clearly identifies this as an anonymous report
+        const subject = encodeURIComponent("Anonymous Cyber Incident Report")
+        
+        // Email body - includes all incident details
+        const body = encodeURIComponent(
+          `Dear Cyber Crime Cell,
+
+A new cyber incident has been reported anonymously through the CyberWise platform.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INCIDENT DETAILS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Incident Type: ${incidentType}
+
+Description:
+${description}
+
+Evidence File: ${file ? `A file named "${file.name}" was uploaded by the reporter.` : "No evidence file was attached."}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+IMPORTANT NOTICE:
+The reporter's identity remains completely confidential and anonymous as per platform policy. Please review this incident and take appropriate action.
+
+This report was submitted via CyberWise - Student Cyber Safety Platform
+
+Regards,
+CyberWise Reporting System`
+        )
+
+        // Construct mailto URL with all parameters
+        const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`
+        
+        // Open default email client with pre-filled details
+        // This works on all platforms (Windows, Mac, Linux, Mobile)
+        window.location.href = mailtoLink
+        
+        console.log("📧 Email client opened with pre-filled report details")
+      } else {
+        // User chose not to share with cybercrime branch
+        console.log("ℹ️ User opted NOT to share with Cyber Crime Branch - Report saved locally only")
+      }
+
+      // ========================================
+      // 🔄 FORM RESET
+      // ========================================
+      // Clear all form fields after successful submission
       setIncidentType("")
       setDescription("")
       setFile(null)
+      setShareWithCybercrime(false) // Reset checkbox too
+      
+      // Note: The file input element will also be cleared
+      // because the file state is reset to null
     }, 1500)
   }
 
@@ -152,6 +220,32 @@ export default function ReportPage() {
                     <li>{t("report.multipleReports")}</li>
                     <li>{t("report.talkToAdult")}</li>
                   </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Share with Cyber Crime Branch Checkbox */}
+            <div className="mb-6 rounded-xl border-2 border-primary/30 bg-primary/5 p-4">
+              <div className="flex items-start gap-3">
+                <Checkbox
+                  id="share-cybercrime"
+                  checked={shareWithCybercrime}
+                  onCheckedChange={(checked) => setShareWithCybercrime(checked as boolean)}
+                  className="mt-1"
+                />
+                <div className="flex-1">
+                  <label
+                    htmlFor="share-cybercrime"
+                    className="flex cursor-pointer items-center gap-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    <Mail className="h-4 w-4 text-primary" />
+                    <span>Share with Cyber Crime Branch</span>
+                  </label>
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    By checking this box, your report will be automatically forwarded to{" "}
+                    <span className="font-mono text-primary">cyberdost@mha.gov.in</span> (Ministry of Home Affairs - CyberDost) for official investigation.
+                    Your identity will remain anonymous.
+                  </p>
                 </div>
               </div>
             </div>

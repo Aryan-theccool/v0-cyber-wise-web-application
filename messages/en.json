@@ -91,13 +91,19 @@
     "title": "AI Support Chat",
     "greeting": "Hi there! I'm here to support you. You're in a safe space now. How can I help you today? Feel free to share what's on your mind, or use one of the quick replies below.",
     "quickReplies": "Quick replies:",
+    "quickRepliesLabel": "Quick replies:",
     "typing": "Typing...",
     "placeholder": "Type your message here... (Press Enter to send)",
     "confidentialNote": "Your conversations are private and confidential. We're here to support you.",
     "quickReply1": "I feel bullied",
     "quickReply2": "I was scammed",
     "quickReply3": "I need help",
-    "quickReply4": "Someone is harassing me"
+    "quickReply4": "Someone is harassing me",
+    "response1": "I'm really sorry you're experiencing bullying. That must be very difficult. Remember, this is not your fault. Please consider documenting the incidents, blocking the person, and reporting this to a trusted adult or authority. You deserve to feel safe.",
+    "response2": "I'm sorry you were scammed. That can be really upsetting. Please don't blame yourself - scammers are very sophisticated. Save all evidence, report it to the platform and authorities, and be cautious about sharing personal information online. You're not alone in this.",
+    "response3": "I'm here to help you. You've taken a brave step by reaching out. Please tell me more about what you're going through, and I'll do my best to support you and provide resources. Remember, you're not alone.",
+    "response4": "I'm sorry someone is harassing you. That's not okay, and you don't deserve this. Please save any evidence of the harassment, block the person, and report them to the platform. Consider talking to a trusted adult or counselor. Your safety matters.",
+    "defaultResponse": "Thank you for sharing that with me. I'm here to listen and support you. Can you tell me more about what's happening? Remember, you're in a safe space, and there are people who want to help you."
   },
   "report": {
     "title": "Anonymous Reporting",

@@ -56,9 +56,37 @@ export default function ChatbotPage() {
     setInput("")
     setIsLoading(true)
 
-    // Simulate AI response
-    setTimeout(() => {
-      // Build responses dynamically with current translations
+    try {
+      // Call Gemini AI API
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: textToSend,
+          conversationHistory: messages.slice(-6), // Send last 6 messages for context
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get AI response');
+      }
+
+      const data = await response.json();
+
+      const aiMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: "assistant",
+        content: data.response,
+        timestamp: new Date(),
+      }
+
+      setMessages((prev) => [...prev, aiMessage])
+    } catch (error) {
+      console.error('Error getting AI response:', error);
+      
+      // Fallback to predefined responses if API fails
       const quickReply1 = t("chatbot.quickReply1");
       const quickReply2 = t("chatbot.quickReply2");
       const quickReply3 = t("chatbot.quickReply3");
@@ -71,16 +99,17 @@ export default function ChatbotPage() {
         [quickReply4]: t("chatbot.response4"),
       }
 
-      const aiMessage: Message = {
+      const fallbackMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
         content: responses[textToSend] || t("chatbot.defaultResponse"),
         timestamp: new Date(),
       }
 
-      setMessages((prev) => [...prev, aiMessage])
+      setMessages((prev) => [...prev, fallbackMessage])
+    } finally {
       setIsLoading(false)
-    }, 1000)
+    }
   }
 
   const handleQuickReply = (text: string) => {

@@ -1,8 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Shield, ArrowLeft, BookOpen, Award, ChevronRight, CheckCircle2, XCircle } from "lucide-react"
+import { Shield, ArrowLeft, BookOpen, Award, ChevronRight, CheckCircle2, XCircle, Video, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
@@ -230,6 +230,41 @@ const quizQuestions: QuizQuestion[] = [
   },
 ]
 
+// Scam awareness videos data
+interface ScamVideo {
+  id: string
+  title: string
+  embedUrl: string
+  description: string
+}
+
+const scamVideos: ScamVideo[] = [
+  {
+    id: "1",
+    title: "Common Online Scams and How to Avoid Them",
+    embedUrl: "https://www.youtube.com/embed/Csp9fce96J4",
+    description: "Learn about the most common online scams targeting students and how to protect yourself."
+  },
+  {
+    id: "2",
+    title: "Phishing Attacks Explained",
+    embedUrl: "https://www.youtube.com/embed/7Hs8S8ZboWs",
+    description: "Understand how phishing works and how to identify suspicious emails and messages."
+  },
+  {
+    id: "3",
+    title: "Social Media Scams to Watch Out For",
+    embedUrl: "https://www.youtube.com/embed/M53S6RaEQbo",
+    description: "Discover the latest social media scams and learn how to stay safe online."
+  },
+  {
+    id: "4",
+    title: "Protecting Your Personal Information Online",
+    embedUrl: "https://www.youtube.com/embed/GEUBU1ETzBs",
+    description: "Essential tips for keeping your personal data secure in the digital age."
+  }
+]
+
 export default function AwarenessPage() {
   const { t } = useTranslation();
   const [selectedCase, setSelectedCase] = useState<CaseStudy | null>(null)
@@ -239,6 +274,54 @@ export default function AwarenessPage() {
   const [showExplanation, setShowExplanation] = useState(false)
   const [score, setScore] = useState(0)
   const [quizComplete, setQuizComplete] = useState(false)
+  
+  // State for video summaries
+  const [videoSummaries, setVideoSummaries] = useState<Record<string, string>>({})
+  const [loadingSummaries, setLoadingSummaries] = useState<Record<string, boolean>>({})
+
+  // Fetch AI summary for a video using Gemini API
+  const fetchVideoSummary = async (video: ScamVideo) => {
+    // Check if summary already exists (memoization)
+    if (videoSummaries[video.id]) {
+      return
+    }
+
+    setLoadingSummaries(prev => ({ ...prev, [video.id]: true }))
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: `Summarize this cybersecurity awareness video titled "${video.title}" in 2-3 sentences. Focus on the key scam prevention tips and what viewers should learn. Keep it concise and actionable for students.`,
+          conversationHistory: []
+        }),
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setVideoSummaries(prev => ({ ...prev, [video.id]: data.response }))
+      } else {
+        // Fallback to video description if API fails
+        setVideoSummaries(prev => ({ ...prev, [video.id]: video.description }))
+      }
+    } catch (error) {
+      console.error('Error fetching video summary:', error)
+      // Fallback to video description
+      setVideoSummaries(prev => ({ ...prev, [video.id]: video.description }))
+    } finally {
+      setLoadingSummaries(prev => ({ ...prev, [video.id]: false }))
+    }
+  }
+
+  // Fetch summaries on component mount
+  useEffect(() => {
+    scamVideos.forEach(video => {
+      fetchVideoSummary(video)
+    })
+  }, []) // Empty dependency array ensures this runs only once
 
   const handleAnswerSelect = (answerIndex: number) => {
     setSelectedAnswer(answerIndex)
@@ -336,6 +419,107 @@ export default function AwarenessPage() {
               </Card>
             ))}
           </div>
+        </section>
+
+        {/* Scam Awareness Videos Section */}
+        <section className="mb-16">
+          <div className="mb-8 flex items-center justify-between">
+            <div>
+              <h2 className="text-3xl font-bold text-slate-900">Scam Awareness Videos</h2>
+              <p className="mt-2 text-slate-600">
+                Watch these educational videos to learn how to spot and avoid online scams
+              </p>
+            </div>
+            <Video className="h-8 w-8 text-blue-600" />
+          </div>
+
+          <div className="grid gap-8 md:grid-cols-2">
+            {scamVideos.map((video) => (
+              <Card key={video.id} className="overflow-hidden border-slate-200 bg-white shadow-md">
+                <CardContent className="p-0">
+                  {/* Video iframe */}
+                  <div className="aspect-video w-full overflow-hidden bg-slate-900">
+                    <iframe
+                      src={video.embedUrl}
+                      title={video.title}
+                      className="h-full w-full"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      loading="lazy"
+                    />
+                  </div>
+                  
+                  {/* Video info */}
+                  <div className="p-6">
+                    <h3 className="mb-3 text-lg font-semibold text-slate-900">{video.title}</h3>
+                    
+                    {/* AI-generated summary */}
+                    <div className="rounded-lg bg-blue-50 p-4">
+                      <div className="mb-2 flex items-center gap-2">
+                        <Award className="h-4 w-4 text-blue-600" />
+                        <span className="text-xs font-medium text-blue-700">AI Summary</span>
+                      </div>
+                      
+                      {loadingSummaries[video.id] ? (
+                        // Loading skeleton
+                        <div className="space-y-2">
+                          <div className="h-3 w-full animate-pulse rounded bg-blue-200" />
+                          <div className="h-3 w-5/6 animate-pulse rounded bg-blue-200" />
+                          <div className="h-3 w-4/6 animate-pulse rounded bg-blue-200" />
+                        </div>
+                      ) : videoSummaries[video.id] ? (
+                        // AI-generated summary
+                        <p className="text-sm leading-relaxed text-slate-700">
+                          {videoSummaries[video.id]}
+                        </p>
+                      ) : (
+                        // Fallback
+                        <p className="text-sm italic text-slate-500">
+                          Loading summary...
+                        </p>
+                      )}
+                      
+                      <p className="mt-2 text-xs text-slate-500">
+                        Summary generated by Gemini AI
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Additional tips card */}
+          <Card className="mt-8 border-blue-200 bg-blue-50">
+            <CardContent className="p-6">
+              <h3 className="mb-3 flex items-center gap-2 text-lg font-semibold text-blue-900">
+                <Shield className="h-5 w-5" />
+                Quick Scam Prevention Tips
+              </h3>
+              <ul className="space-y-2 text-sm text-slate-700">
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-blue-600" />
+                  <span>Never share personal information (passwords, OTPs, bank details) with anyone</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-blue-600" />
+                  <span>Verify sender identity before clicking links or downloading attachments</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-blue-600" />
+                  <span>Be skeptical of "too good to be true" offers and urgent requests</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-blue-600" />
+                  <span>Use strong, unique passwords and enable two-factor authentication</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-blue-600" />
+                  <span>Report suspicious activity to authorities and platform moderators</span>
+                </li>
+              </ul>
+            </CardContent>
+          </Card>
         </section>
 
         {/* Quiz Section */}

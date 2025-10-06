@@ -20,12 +20,21 @@ export async function createUser(input: {
 
   try {
     // Check if username already exists
-    const existing = await prisma.user.findUnique({
+    const existingUsername = await prisma.user.findUnique({
       where: { username: username.toLowerCase() },
     });
 
-    if (existing) {
+    if (existingUsername) {
       return { ok: false, error: "Username already exists" };
+    }
+
+    // Check if mobile number already exists
+    const existingMobile = await prisma.user.findUnique({
+      where: { mobile: mobile },
+    });
+
+    if (existingMobile) {
+      return { ok: false, error: "Mobile number is already registered" };
     }
 
     // Hash password
@@ -55,6 +64,10 @@ export async function createUser(input: {
     
     // Provide more specific error messages
     if (error.code === 'P2002') {
+      // Check which field caused the unique constraint violation
+      if (error.meta?.target?.includes('mobile')) {
+        return { ok: false, error: "Mobile number is already registered" };
+      }
       return { ok: false, error: "Username already exists" };
     }
     if (error.code === 'P2003') {

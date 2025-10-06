@@ -53,16 +53,22 @@ export function UserProfileMenu() {
   }, []);
 
   const handleLogout = async () => {
-    if (isAuthenticated) {
+    try {
+      // Call logout API
       await fetch("/api/auth/logout", { method: "POST" });
-      // Clear username from localStorage
-      localStorage.removeItem('username');
-      router.push("/");
-      router.refresh();
-    } else {
-      // If not authenticated, just redirect to login
-      router.push("/");
+    } catch (error) {
+      console.error("Logout API error:", error);
     }
+    
+    // Clear all local storage
+    localStorage.removeItem('username');
+    localStorage.clear();
+    
+    // Clear session cookie manually (backup)
+    document.cookie = "session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    
+    // Redirect to home page
+    window.location.href = "/";
   };
 
   // Get first letter of username for avatar

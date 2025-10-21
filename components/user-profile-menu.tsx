@@ -53,42 +53,26 @@ export function UserProfileMenu() {
   }, []);
 
   const handleLogout = async () => {
-    if (isAuthenticated) {
+    try {
+      // Call logout API
       await fetch("/api/auth/logout", { method: "POST" });
-      // Clear username from localStorage
-      localStorage.removeItem('username');
-      router.push("/");
-      router.refresh();
-    } else {
-      // If not authenticated, just redirect to login
-      router.push("/");
+    } catch (error) {
+      console.error("Logout API error:", error);
     }
+    
+    // Clear all local storage
+    localStorage.removeItem('username');
+    localStorage.clear();
+    
+    // Clear session cookie manually (backup)
+    document.cookie = "session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    
+    // Redirect to home page
+    window.location.href = "/";
   };
 
   // Get first letter of username for avatar
   const avatarLetter = user.username.charAt(0).toUpperCase();
-
-  // Prevent hydration mismatch - don't render until mounted
-  if (!isMounted) {
-    return (
-      <div className="relative">
-        <button
-          className="flex items-center gap-2 rounded-lg px-3 py-2 transition-all hover:bg-accent"
-          aria-label="User menu"
-          disabled
-        >
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[#4A90E2] via-[#9B59B6] to-[#1ABC9C] text-white shadow-md">
-            <span className="text-sm font-bold">S</span>
-          </div>
-          <div className="hidden flex-col items-start md:flex">
-            <span className="text-sm font-semibold leading-tight">Student</span>
-            <span className="text-xs text-muted-foreground">Student</span>
-          </div>
-          <ChevronDown className="h-4 w-4 text-muted-foreground" />
-        </button>
-      </div>
-    );
-  }
 
   return (
     <div className="relative">

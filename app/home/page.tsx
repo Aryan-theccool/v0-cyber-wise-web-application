@@ -2,7 +2,7 @@
 
 import type React from "react"
 import Link from "next/link"
-import { Shield, MessageCircle, FileText, BookOpen, BarChart3, PenTool } from "lucide-react"
+import { Shield, MessageCircle, FileText, BookOpen, BarChart3, PenTool, AlertTriangle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { CyberWiseLogo } from "@/components/cyberwise-logo"
 import { AppNav } from "@/components/app-nav"
@@ -53,6 +53,12 @@ export default function HomePage() {
             title={t("home.aiSupportTitle")}
             description={t("home.aiSupportDesc")}
             href="/chatbot"
+          />
+          <FeatureCard
+            icon={<AlertTriangle className="h-6 w-6" />}
+            title={t("home.detectorTitle")}
+            description={t("home.detectorDesc")}
+            href="/harassment-detector"
           />
           <FeatureCard
             icon={<FileText className="h-6 w-6" />}

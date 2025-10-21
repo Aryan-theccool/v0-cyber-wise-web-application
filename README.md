@@ -3,7 +3,7 @@
 *Automatically synced with your [v0.app](https://v0.app) deployments*
 
 [![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/anvesh-trivedis-projects/v0-cyber-wise-web-application)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/projects/N19GmI37x6b)
+
 
 ## Overview
 
@@ -12,15 +12,9 @@ Any changes you make to your deployed app will be automatically pushed to this r
 
 ## Deployment
 
-Your project is live at:
+The project is live at:
 
 **[https://vercel.com/anvesh-trivedis-projects/v0-cyber-wise-web-application](https://vercel.com/anvesh-trivedis-projects/v0-cyber-wise-web-application)**
-
-## Build your app
-
-Continue building your app on:
-
-**[https://v0.app/chat/projects/N19GmI37x6b](https://v0.app/chat/projects/N19GmI37x6b)**
 
 ## How It Works
 

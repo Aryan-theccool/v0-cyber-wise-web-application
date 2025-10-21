@@ -42,9 +42,22 @@ export default function ProfilePage() {
 
   const handleLogout = async () => {
     if (confirm("Are you sure you want to logout?")) {
-      await fetch("/api/auth/logout", { method: "POST" });
-      router.push("/");
-      router.refresh();
+      try {
+        // Call logout API
+        await fetch("/api/auth/logout", { method: "POST" });
+      } catch (error) {
+        console.error("Logout API error:", error);
+      }
+      
+      // Clear all local storage
+      localStorage.removeItem('username');
+      localStorage.clear();
+      
+      // Clear session cookie manually (backup)
+      document.cookie = "session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      
+      // Redirect to home page
+      window.location.href = "/";
     }
   };
 

@@ -37,7 +37,18 @@ export async function POST(req: Request) {
         parentMobile: result.user.parentMobile,
       }
     });
-  } catch (e) {
-    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+  } catch (e: any) {
+    console.error("Signin error:", e);
+    
+    // Check for database connection errors
+    if (e.message?.includes('connect') || e.code === 'ECONNREFUSED') {
+      return NextResponse.json({ 
+        error: "Database connection failed. Please ensure your database is running and .env file is configured correctly." 
+      }, { status: 503 });
+    }
+    
+    return NextResponse.json({ 
+      error: e.message || "Invalid request" 
+    }, { status: 400 });
   }
 }
